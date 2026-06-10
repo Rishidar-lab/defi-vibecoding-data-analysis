@@ -14,7 +14,7 @@ Arbitrum DeFi TVL has experienced a **−56% drawdown** from its Oct 2025 peak. 
 
 This agent template automatically allocates capital across Arbitrum stablecoin pools using a risk-tiered strategy. Instead of just picking the highest APY, it uses DefiLlama's `sigma` (APY variability) and `prediction_class` (ML direction forecast) to score pools on a risk-adjusted basis. It also features a macro "de-risk" trigger that shifts all capital to the safest pool when Arbitrum chain TVL momentum drops sharply.
 
-*(Note: This agent relies on the `defillama-risk-mcp-server` proposed in a companion issue).*
+*(Note: This agent relies on the `defillama-risk-mcp-server` proposed in companion issue #666).*
 
 ## Required Protocols
 - **Primary protocols:** Any Arbitrum stablecoin pool indexed by DefiLlama (e.g., Aave V3, Compound V3, Fluid, Morpho).
