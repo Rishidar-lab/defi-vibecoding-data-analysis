@@ -1,0 +1,106 @@
+# Vibekit Issue Draft — Phase C
+
+> **Template:** `mcp_server.yml` (primary) + `agent_template.yml` (secondary)
+> **Proposed title:** `[New MCP Server + Agent Template]: DefiLlama Risk Score MCP Tool + Risk-Tiered Stablecoin Yield-Router Agent`
+> **Labels:** `enhancement`, `mcp-server`, `agent-template`
+
+---
+
+## MCP Server Name
+`defillama-risk-mcp-server`
+
+## MCP Category
+**Security/Risk Analysis** (primary) + **Price Data/Analytics** (secondary)
+
+## MCP Description
+
+Arbitrum DeFi TVL has experienced a **−56% drawdown** from its Oct 2025 peak ($1.52B as of May 2026). In this environment, blindly chasing the highest APY exposes users to uncompensated volatility and protocol risk. DefiLlama already exposes free, no-auth `sigma` (APY variability), `mu` (long-run mean), and `prediction_class` (ML direction forecast) fields on every pool — but no Vibekit MCP tool currently surfaces these as risk-adjusted rankings.
+
+This contribution proposes:
+
+1. **`defillama-risk-mcp-server`** — An MCP server that fetches Arbitrum pool data from `yields.llama.fi` and exposes risk-adjusted pool rankings using DefiLlama's own sigma/mu/prediction fields. No API key required.
+
+2. **`stablecoin-yield-router-agent`** — A community agent template (in `typescript/community/agents/`) that uses the MCP tool to allocate capital across Arbitrum stablecoin pools with a risk-tiered strategy and a chain TVL momentum de-risk trigger.
+
+This directly addresses Trailblazer 2.0's stated goal of "making yield searching 10x easier" with a data-driven, backtested approach.
+
+## Data Source / API
+
+| Field | Value |
+|-------|-------|
+| **Primary API** | `https://yields.llama.fi/pools` |
+| **Chain TVL API** | `https://api.llama.fi/v2/historicalChainTvl/Arbitrum` |
+| **Authentication** | None required (free public API) |
+| **Rate limits** | No published limit; polite backoff implemented |
+| **Documentation** | https://api-docs.defillama.com/ |
+| **Reliability** | High — DefiLlama is the canonical DeFi data source; cited per their FAQ |
+
+## MCP Tools to Implement
+
+**Tool 1: `get_risk_adjusted_pools`**
+- **Description:** Fetches all Arbitrum stablecoin pools from DefiLlama, filters by TVL ≥ $5M / ilRisk=no / outlier=false, and returns them ranked by `apyMean30d / (1 + 100 * sigma)` with prediction penalty applied.
+- **Input:** `{ min_tvl_usd?: number, chain?: string, stablecoin_only?: boolean }`
+- **Output:** Array of `{ pool_id, project, symbol, apy_pct, apy_mean_30d, sigma, mu, prediction_class, risk_score, tvl_usd }`
+
+**Tool 2: `get_chain_tvl_momentum`**
+- **Description:** Fetches Arbitrum chain TVL history and returns the 30-day momentum percentage. Used to trigger the de-risk shift.
+- **Input:** `{ chain?: string, lookback_days?: number }`
+- **Output:** `{ chain, current_tvl_usd, tvl_30d_ago_usd, momentum_pct, de_risk_triggered: boolean }`
+
+**Tool 3: `get_pool_risk_profile`**
+- **Description:** Returns the full risk profile for a specific pool by pool ID.
+- **Input:** `{ pool_id: string }`
+- **Output:** `{ pool_id, project, symbol, sigma, mu, prediction_class, prediction_prob_pct, apy_history_30d, risk_tier: "low" | "medium" | "high" }`
+
+## Agent Integration Examples
+
+**Stablecoin Yield-Router Agent:**
+1. Agent calls `get_chain_tvl_momentum` at each weekly rebalance.
+2. If `de_risk_triggered = true` (momentum < −15%), agent calls `get_risk_adjusted_pools` and allocates 100% to the lowest-sigma pool.
+3. Otherwise, agent allocates capital across top-ranked pools (capped at 40% per pool) using the risk-adjusted score from `get_risk_adjusted_pools`.
+4. Agent reports current allocation and reasoning to the user via chat.
+
+## Authentication Requirements
+**No authentication required** — DefiLlama's public API is entirely free and unauthenticated.
+
+## Configuration Options
+
+```
+Required:
+  (none — fully public API)
+
+Optional:
+  MIN_TVL_USD=5000000       # Minimum pool TVL filter (default: $5M)
+  DE_RISK_THRESHOLD=-0.15   # Chain TVL momentum threshold for de-risk (default: -15%)
+  MAX_POOL_WEIGHT=0.40      # Maximum allocation per pool (default: 40%)
+  REBALANCE_INTERVAL_DAYS=7 # Rebalance frequency (default: weekly)
+```
+
+## Testing Strategy
+
+- **Unit tests:** Mock `yields.llama.fi` and `api.llama.fi` responses; verify ranking math, de-risk trigger logic, and Zod schema validation for all tool inputs/outputs.
+- **Integration tests:** Live fetch from DefiLlama APIs; verify response parsing and error handling for network failures.
+- **Agent tests:** Verify the yield-router agent correctly calls MCP tools and produces valid allocation decisions under both normal and de-risk conditions.
+- **`pnpm test`:** All tests pass within the `typescript/community/` workspace.
+
+## Backtest Evidence
+
+A backtest of the risk-tiered routing strategy on Arbitrum stablecoin pool histories (Jan 2025 – Jun 2026) has been completed:
+
+| Metric | Risk-Tiered Router | Naive Highest-APY |
+|--------|--------------------|-------------------|
+| Realized APY (annualized) | **4.73%** | 7.22% |
+| Max drawdown of yield | **0.00%** | 0.00% |
+| Annual turnover | 744% | N/A |
+| Feb–May 2026 period return | **1.22%** | 2.50% |
+
+> **Note on results:** The router trades ~2.5% of absolute APY for significantly more stable, diversified exposure. In a regime where the highest-APY pool carries a "Down" prediction and 30-day unlock risk (e.g., sUSDAI at 8.07%), the router's conservative allocation is the intended behavior. Full methodology and charts: `docs/backtest_report.md` in our research repo.
+
+**Research repo:** https://github.com/Rishidar-labs/defi-vibecoding-data-analysis *(to be published)*
+
+## Pre-submission Checklist
+
+- [x] I have searched existing issues to avoid duplicates (no yield-router or DefiLlama risk MCP found)
+- [x] I have clearly described the MCP server's functionality
+- [x] I have identified the data source and API requirements
+- [x] I will wait for the Vibekit team to approve this issue before continuing to implementation

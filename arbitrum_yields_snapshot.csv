@@ -1,0 +1,6 @@
+timestamp,asset,protocol,chain,pool_id,apy_pct,apy_mean_30d_pct,tvl_usd,sigma,mu,stablecoin,il_risk,exposure,prediction_class,prediction_prob_pct,pool_meta
+2026-06-10,SUSDS,sky-lending,Arbitrum,3637ce7b-529b-49c1-964c-710a50b2939c,3.60,3.63,359194099,0.00688,3.75929,true,no,single,Stable/Up,88,
+2026-06-10,USDS,spark-savings,Arbitrum,9d499222-a01a-45bb-bbc9-f01c7923693b,3.60,3.63,359194099,0.00124,3.63166,true,no,single,Stable/Up,72,
+2026-06-10,SUSDAI,usd-ai,Arbitrum,712ce948-bd9e-4f4a-8916-b72c447f7578,8.07,7.20,289243122,0.04829,6.75985,true,no,single,Down,59,30d unlock
+2026-06-10,WBTC,aave-v3,Arbitrum,7c5e69a4-2430-4fa2-b7cb-857f79d7d1bf,0.04596,0.04799,154819616,0.01197,0.13699,false,no,single,Stable/Up,83,
+2026-06-10,WEETH,aave-v3,Arbitrum,3df9ffeb-8c72-438c-a9ae-026488d8f2b2,0.00003,0.00002,74733136,0.00567,0.05584,false,no,single,Stable/Up,78,
