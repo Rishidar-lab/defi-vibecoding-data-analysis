@@ -1,11 +1,31 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
 *.pyo
+*.egg-info/
+dist/
+build/
+
+# Environment
 .env
-files(4).zip
+
+# Internal automation files (kept locally, never published)
+_internal/
+
+# Temporary / scratch files
+diagnose.py
 parse_prs.py
+files(4).zip
+
+# Phase checkpoints (internal only)
 phase_A_checkpoint.md
 phase_B_checkpoint.md
 phase_C_checkpoint.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# FUSE mounts
 mnt/
