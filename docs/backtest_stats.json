@@ -1,0 +1,53 @@
+{
+  "stats": {
+    "7d": {
+      "router_apy": 4.080143806526659,
+      "naive_apy": 7.173229576362994,
+      "router_apy_vol": 2.203112401148502,
+      "naive_apy_vol": 2.5544519838059268,
+      "router_dd": -0.08829429732063358,
+      "naive_dd": 0.0,
+      "ew_sigma": 0.1331866451612903,
+      "down_pct": 0.0,
+      "ann_turnover": 484.5153061224489,
+      "years": 2.951403148528405
+    },
+    "14d": {
+      "router_apy": 4.207011835257646,
+      "naive_apy": 7.186533179869059,
+      "router_apy_vol": 2.219647352305513,
+      "naive_apy_vol": 2.6019680734689166,
+      "router_dd": -0.0882942973206379,
+      "naive_dd": 0.0,
+      "ew_sigma": 0.13227371794871798,
+      "down_pct": 0.0,
+      "ann_turnover": 369.3158627087198,
+      "years": 2.951403148528405
+    },
+    "30d": {
+      "router_apy": 4.146826691628269,
+      "naive_apy": 6.859298691130067,
+      "router_apy_vol": 2.1858028203245623,
+      "naive_apy_vol": 2.4378888267120806,
+      "router_dd": -0.050000000000002515,
+      "naive_dd": 0.0,
+      "ew_sigma": 0.13645011111111113,
+      "down_pct": 0.0,
+      "ann_turnover": 254.1164192949907,
+      "years": 2.951403148528405
+    }
+  },
+  "stress": {
+    "router_period_return": 0.9850392240204675,
+    "naive_period_return": -0.5738120154823445,
+    "router_max_dd": -0.08829429732063358,
+    "naive_max_dd": -2.975812672355679
+  },
+  "depeg_proxy": {
+    "symbol": "USDAI",
+    "project": "pendle",
+    "sigma": 0.17976,
+    "prediction": "Stable/Up",
+    "haircut_pct": -3.0
+  }
+}
