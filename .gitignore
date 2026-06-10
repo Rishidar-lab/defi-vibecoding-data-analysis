@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+files(4).zip
+parse_prs.py
+phase_A_checkpoint.md
+phase_B_checkpoint.md
+phase_C_checkpoint.md
+mnt/

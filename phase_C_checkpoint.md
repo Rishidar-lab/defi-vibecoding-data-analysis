@@ -1,1 +1,0 @@
-Status: C.2 | Done: Drafted Vibekit issue proposing the risk-tiered yield router and MCP tool. | Blocked: None | [USER] needed: Review issue draft and post it via gh CLI. | Next: Phase D (Build - after approval only)
