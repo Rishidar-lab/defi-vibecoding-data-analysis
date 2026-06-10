@@ -96,7 +96,7 @@ A backtest of the risk-tiered routing strategy on Arbitrum stablecoin pool histo
 
 > **Note on results:** The router trades ~2.5% of absolute APY for significantly more stable, diversified exposure. In a regime where the highest-APY pool carries a "Down" prediction and 30-day unlock risk (e.g., sUSDAI at 8.07%), the router's conservative allocation is the intended behavior. Full methodology and charts: `docs/backtest_report.md` in our research repo.
 
-**Research repo:** https://github.com/Rishidar-labs/defi-vibecoding-data-analysis *(to be published)*
+**Research repo:** https://github.com/Rishidar-lab/defi-vibecoding-data-analysis
 
 ## Pre-submission Checklist
 
